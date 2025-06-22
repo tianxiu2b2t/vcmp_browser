@@ -1,0 +1,10 @@
+[package]
+name = "vcmp_browser-application"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
+
+vcmp_browser_core = { path = "../vcmp_browser_core" }
