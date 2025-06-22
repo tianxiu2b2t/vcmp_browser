@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "crates/vcmp_browser_core",
+    "crates/application"
+]
+resolver = "2"
+
+[profile.release]
+debug = true 
