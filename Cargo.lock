@@ -1380,6 +1380,7 @@ dependencies = [
  "arc-bytes",
  "encoding_rs",
  "reqwest",
+ "serde_derive",
  "serde_json",
  "toml",
  "tracing",

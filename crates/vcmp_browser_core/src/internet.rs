@@ -30,26 +30,26 @@ impl Display for InternetServer {
     }
 }
 
-
-
 pub fn fetch_internet_servers() -> Vec<InternetServer> {
-    let url = get_config().master;
-    let uri = Url::parse(({
-        if url.ends_with("/") {
-            format!("{url}servers/")
-        } else {
-            format!("{url}/servers/")
-        }
-    }).as_str()).expect("Failed to parse URL");
+    let url = get_config().index_url.master;
+    let uri = Url::parse(
+        ({
+            if url.ends_with("/") {
+                format!("{url}servers/")
+            } else {
+                format!("{url}/servers/")
+            }
+        })
+        .as_str(),
+    )
+    .expect("Failed to parse URL");
     event!(Level::INFO, "Fetching servers from {}", uri);
-    let response = reqwest::blocking::get(
-        uri
-    );
+    let response = reqwest::blocking::get(uri);
     if let Err(e) = response {
         event!(Level::ERROR, "Failed to fetch servers: {}", e);
         return vec![];
     }
-    
+
     let response = response.unwrap();
     let json = response.json();
     if let Err(e) = json {
@@ -67,10 +67,9 @@ pub fn fetch_internet_servers() -> Vec<InternetServer> {
             },
             official: server.get("is_official").unwrap().as_bool().unwrap(),
         })
-    };
+    }
 
     event!(Level::INFO, "Fetched {} servers", servers.len());
 
     servers
-
 }

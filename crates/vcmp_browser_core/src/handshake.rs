@@ -2,7 +2,8 @@ use crate::{encodes::decode_gbk, net::resolve_to_ipv4};
 use arc_bytes::ArcBytes;
 use core::time;
 use std::{
-    net::{Ipv4Addr, UdpSocket}, time::Duration,
+    net::{Ipv4Addr, UdpSocket},
+    time::Duration,
 };
 
 pub type AddressInfo = String;
@@ -22,7 +23,15 @@ pub struct HandshakeInfo {
     pub elapsed: Duration,
 }
 
-impl<'a> From<(AddressInfo, ArcBytes<'a>, ArcBytes<'a>, ArcBytes<'a>, Duration)> for HandshakeInfo {
+impl<'a>
+    From<(
+        AddressInfo,
+        ArcBytes<'a>,
+        ArcBytes<'a>,
+        ArcBytes<'a>,
+        Duration,
+    )> for HandshakeInfo
+{
     fn from(
         (address_info, handshake_packet, mut resp_i, mut resp_c, elapsed): (
             AddressInfo,
@@ -36,8 +45,10 @@ impl<'a> From<(AddressInfo, ArcBytes<'a>, ArcBytes<'a>, ArcBytes<'a>, Duration)>
         let addr =
             Ipv4Addr::new(handshake[0], handshake[1], handshake[2], handshake[3]).to_string();
 
-        let version = { 
-            decode_gbk(resp_i.read_bytes(12).unwrap().as_slice()).trim_end_matches('\0').to_string()
+        let version = {
+            decode_gbk(resp_i.read_bytes(12).unwrap().as_slice())
+                .trim_end_matches('\0')
+                .to_string()
         };
 
         let password = { resp_i.read_bytes(1).unwrap()[0] == 1 };
@@ -103,7 +114,7 @@ impl<'a> From<(AddressInfo, ArcBytes<'a>, ArcBytes<'a>, ArcBytes<'a>, Duration)>
             players,
             version,
             password,
-            elapsed
+            elapsed,
         }
     }
 }
@@ -167,12 +178,11 @@ pub fn handshake(address: &str) -> Result<HandshakeInfo, &str> {
         ArcBytes::from(buf[handshake_length..size].to_vec())
     };
 
-
     Ok(HandshakeInfo::from((
         address.to_string(),
         ArcBytes::from(packet),
         resp_packet_i,
         resp_packet_c,
-        elapsed
+        elapsed,
     )))
 }

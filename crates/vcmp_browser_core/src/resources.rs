@@ -6,7 +6,7 @@ use crate::config::get_config;
 pub fn download_resource<'a>(
     version: &str,
 ) -> Result<ArcBytes<'a>, String> {
-    let url = get_config().update;
+    let url = &get_config().index_url.update;
     let uri = Url::parse(({
         if url.ends_with("/") {
             format!("{url}download/")

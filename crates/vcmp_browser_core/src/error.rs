@@ -3,6 +3,4 @@ pub enum Error {
     FailedToResloveAddress(String),
 }
 
-impl Error {
-    
-}
+impl Error {}
