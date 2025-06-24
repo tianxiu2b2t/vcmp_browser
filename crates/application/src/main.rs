@@ -9,9 +9,6 @@ pub fn init_logger() {
 pub fn main() {
     init_logger();
     init_config();
-    //tracing::event!(
-    //    tracing::Level::INFO,
-    //    "{:?}",
-    //    vcmp_browser_core::resources::download_resource("0.4.7.1")
-    //);
+    let buffer = vcmp_browser_core::resources::download_resource("0.4.7.1").expect("Failed to download resource");
+    vcmp_browser_core::resources::unpack_resource(buffer);
 }
