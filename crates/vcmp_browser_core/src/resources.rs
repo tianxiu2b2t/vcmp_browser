@@ -80,7 +80,7 @@ pub fn download_resource(
     version: &str
 ) -> Result<Resource, String> {
     let download_buffer = {
-        let url = &get_config().index_url.update;
+        let url = &get_config().index_url.get_update();
         let uri = Url::parse(({
             if url.ends_with("/") {
                 format!("{url}download/")

@@ -31,7 +31,7 @@ impl Display for InternetServer {
 }
 
 pub fn fetch_internet_servers() -> Vec<InternetServer> {
-    let url = get_config().index_url.master;
+    let url = get_config().index_url.get_master();
     let uri = Url::parse(
         ({
             if url.ends_with("/") {

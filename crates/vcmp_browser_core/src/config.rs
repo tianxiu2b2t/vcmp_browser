@@ -40,6 +40,8 @@ impl MainConfig {
 
         let mut root_table = toml::Table::new();
         root_table.insert("index_url".to_string(), self.index_url.clone().into());
+        root_table.insert("profile".to_string(), self.profile.clone().into());
+        root_table.insert("game".to_string(), self.game.clone().into());
         let config_content = to_string_pretty(&root_table).unwrap();
         
         std::fs::write(path, config_content).unwrap();
