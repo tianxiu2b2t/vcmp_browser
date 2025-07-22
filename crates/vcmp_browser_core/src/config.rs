@@ -1,32 +1,30 @@
+pub mod game;
 pub mod index_url;
 pub mod profile;
-pub mod game;
 
 use serde_derive::Deserialize;
 
-use std::sync::OnceLock;
 use std::default::Default;
+use std::sync::OnceLock;
 
+use crate::config::{game::GameSettings, index_url::IndexUrl, profile::Profile};
 use crate::utils::get_home_dir;
-use crate::config::{
-    profile::Profile,
-    index_url::IndexUrl,
-    game::GameSettings
-};
 
 #[derive(Debug, Clone, Deserialize, Default)]
 pub struct MainConfig {
     pub index_url: IndexUrl,
     pub profile: Profile,
-    pub game: GameSettings
+    pub game: GameSettings,
 }
-
 
 impl MainConfig {
     pub fn load_from_path() -> Self {
         let path = get_home_dir().join("config.toml");
         if !path.exists() {
-            tracing::event!(tracing::Level::INFO, "Config file not found, using default config.");
+            tracing::event!(
+                tracing::Level::INFO,
+                "Config file not found, using default config."
+            );
             Self::default().save_to_path();
         }
         let config_content = std::fs::read_to_string(path).unwrap();
@@ -43,10 +41,8 @@ impl MainConfig {
         root_table.insert("profile".to_string(), self.profile.clone().into());
         root_table.insert("game".to_string(), self.game.clone().into());
         let config_content = to_string_pretty(&root_table).unwrap();
-        
-        std::fs::write(path, config_content).unwrap();
-        
 
+        std::fs::write(path, config_content).unwrap();
     }
 }
 

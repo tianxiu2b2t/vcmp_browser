@@ -11,7 +11,6 @@ pub fn get_home_dir() -> PathBuf {
     path
 }
 
-
 pub fn move_files(src: &std::path::Path, dst: &std::path::Path) -> Result<(), String> {
     if src.is_file() && dst.is_file() {
         std::fs::rename(src, dst).expect("Failed to move file");

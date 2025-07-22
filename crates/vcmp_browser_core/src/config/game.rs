@@ -10,11 +10,15 @@ pub struct GameSettings {
 impl From<GameSettings> for toml::Value {
     fn from(url: GameSettings) -> Self {
         let mut root_table = toml::Table::new();
-        root_table.insert("application".to_string(), toml::Value::String(url.application));
-        
+        root_table.insert(
+            "application".to_string(),
+            toml::Value::String(url.application),
+        );
+
         toml::Value::Table(root_table)
     }
 }
 
-
-fn default_empty() -> String { "".to_string() }
+fn default_empty() -> String {
+    "".to_string()
+}

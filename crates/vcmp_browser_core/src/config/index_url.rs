@@ -13,7 +13,7 @@ impl IndexUrl {
     pub fn get_master(&self) -> String {
         if self.master.is_empty() {
             // set to master
-            return default_master_url()
+            return default_master_url();
         }
 
         self.master.clone()
@@ -34,11 +34,14 @@ impl From<IndexUrl> for toml::Value {
         let mut root_table = toml::Table::new();
         root_table.insert("master".to_string(), toml::Value::String(url.get_master()));
         root_table.insert("update".to_string(), toml::Value::String(url.get_update()));
-        
+
         toml::Value::Table(root_table)
     }
 }
 
-
-fn default_master_url() -> String { "https://txit.top/vcmp".to_string() }
-fn default_update_url() -> String { "https://txit.top/vcmp".to_string() }
+fn default_master_url() -> String {
+    "https://txit.top/vcmp".to_string()
+}
+fn default_update_url() -> String {
+    "https://txit.top/vcmp".to_string()
+}

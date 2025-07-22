@@ -2,3 +2,4 @@
 .lh
 .vscode
 appdata
+crates/vcmp_browser_core/src/game_launcher.rs

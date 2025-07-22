@@ -1,6 +1,7 @@
 pub mod config;
 pub mod encodes;
 pub mod error;
+pub mod game_launcher;
 pub mod handshake;
 pub mod internet;
 pub mod net;

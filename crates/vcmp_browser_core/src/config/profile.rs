@@ -11,10 +11,11 @@ impl From<Profile> for toml::Value {
     fn from(url: Profile) -> Self {
         let mut root_table = toml::Table::new();
         root_table.insert("username".to_string(), toml::Value::String(url.username));
-        
+
         toml::Value::Table(root_table)
     }
 }
 
-
-fn default_empty() -> String { "".to_string() }
+fn default_empty() -> String {
+    "".to_string()
+}
