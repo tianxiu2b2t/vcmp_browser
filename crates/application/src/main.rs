@@ -1,4 +1,11 @@
-use std::path::Path;
+// Prevents additional console window on Windows in release, DO NOT REMOVE!!
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+
+fn main() {
+    vcmp_launcher_lib::run()
+}
+
+/*use std::path::Path;
 
 use tracing::event;
 use vcmp_browser_core::{config::init as init_config, game_launcher::launcher_common_game};
@@ -20,4 +27,4 @@ pub fn main() {
     if let Err(e) = res {
         event!(tracing::Level::ERROR, "Error: {}", e);
     }
-}
+}*/
