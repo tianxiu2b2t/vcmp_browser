@@ -8,7 +8,7 @@ use std::default::Default;
 use std::sync::OnceLock;
 
 use crate::config::{game::GameSettings, index_url::IndexUrl, profile::Profile};
-use crate::utils::get_home_dir;
+use crate::util::get_home_dir;
 
 #[derive(Debug, Clone, Deserialize, Default)]
 pub struct MainConfig {

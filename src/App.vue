@@ -1,160 +1,169 @@
-<script setup lang="ts">
-import { ref } from "vue";
-import { invoke } from "@tauri-apps/api/core";
+<template>
+	<header>
+		<!-- Left -->
+		<div>
+			<button @click="toggleSidebar">Menu</button>
+			<button>Favourite</button>
+			<button>Internet</button>
+			<button>History</button>
+		</div>
+		<!-- Right -->
+		<div>
+			<button>Dark</button>
+		</div>
+	</header>
+	
+  	<div class="body">
+		<div class="side" :class="{ hidden: isSidebarHidden }">
+			<div>a</div>
+		</div>
+		<main :class="{ 'sidebar-hidden': isSidebarHidden }"> <!-- 顶部留出导航栏高度的空间 -->
+  	  		<RouterView />
+  		</main>
+	</div>
+</template>
 
-const greetMsg = ref("");
-const name = ref("");
-
-async function greet() {
-  // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-  greetMsg.value = await invoke("greet", { name: name.value });
+<script>
+export default {
+  data() {
+    return {
+      isSidebarHidden: false
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      this.isSidebarHidden = !this.isSidebarHidden;
+    }
+  },
+  mounted() {
+    // 在小屏幕上默认隐藏侧边栏
+    if (window.innerWidth <= 800) {
+      this.isSidebarHidden = true;
+    }
+    
+    // 监听窗口大小变化
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 800) {
+        this.isSidebarHidden = false;
+      } else {
+        this.isSidebarHidden = true;
+      }
+    });
+  }
 }
 </script>
 
-<template>
-  <main class="container">
-    <h1>Welcome to Tauri + Vue</h1>
-
-    <div class="row">
-      <a href="https://vitejs.dev" target="_blank">
-        <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-      </a>
-      <a href="https://tauri.app" target="_blank">
-        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      </a>
-      <a href="https://vuejs.org/" target="_blank">
-        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-      </a>
-    </div>
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
-
-    <form class="row" @submit.prevent="greet">
-      <input id="greet-input" v-model="name" placeholder="Enter a name..." />
-      <button type="submit">Greet</button>
-    </form>
-    <p>{{ greetMsg }}</p>
-  </main>
-</template>
-
-<style scoped>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #249b73);
-}
-
-</style>
 <style>
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-
-  color: #0f0f0f;
-  background-color: #f6f6f6;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+	--text-color: #111;
+	--text-light-color: #eee;
+	--theme-color: #8edaf3;
+	--sidebar-width: 200px;
 }
 
-.container {
-  margin: 0;
-  padding-top: 10vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
+/* 滚动条样式 */
+::-webkit-scrollbar, html ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb, html ::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px #0000;
+    background-color: #666;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-track, html ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px #0000;
+    background-color: #afafaf;
+    border-radius: 10px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: 0.75s;
+html, body {
+  	padding: 0;
+  	margin: 0;
+  	background: rgb(240, 240, 240);
+  	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
+/* 平滑滚动 */
+html {
+  	scroll-behavior: smooth;
+	overflow: hidden;
+	max-height: 100vh;
+}
+.body {
+	overflow: hidden;
+	margin-top: 56px;
+	display: flex;
+	flex-direction: row;
+	height: 100vh;
+	min-width: 680px;
 }
 
-.row {
-  display: flex;
-  justify-content: center;
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 8px;
+	height: 56px;
+	background-color: transparent;
+	backdrop-filter: blur(2px);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+	transition: all 0.3s ease-in-out;
+}
+header:hover {
+	backdrop-filter: blur(5px);
+}
+header button {
+	background-color: transparent;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 16px;
+	color: #333;
+	padding: 8px 8px;
+	border-radius: 4px;
+	transition: all 0.3s ease-in-out;
+}
+header button:hover {
+	background-color: var(--theme-color);
+}
+main {
+	margin-left: var(--sidebar-width);
+	overflow: auto;
+	transition: margin-left 150ms cubic-bezier(0.4, 0, 0.2, 1);
+	min-height: calc(100vh - 56px);
+}
+main.sidebar-hidden {
+	margin-left: 0;
+}
+.side {
+	width: var(--sidebar-width);
+	height: 100%;
+	background-color: transparent;
+	backdrop-filter: blur(2px);
+	position: fixed;
+	transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+.side.hidden {
+	transform: translateX(-100%);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
-}
-
-h1 {
-  text-align: center;
-}
-
-input,
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #ffffff;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-}
-
-button {
-  cursor: pointer;
-}
-
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
-}
-
-input,
-button {
-  outline: none;
-}
-
-#greet-input {
-  margin-right: 5px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
+/* 媒体查询，适配小屏幕设备 */
+@media (max-width: 800px) {
+  main {
+    margin-left: 0;
   }
-
-  a:hover {
-    color: #24c8db;
-  }
-
-  input,
-  button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
-  }
-  button:active {
-    background-color: #0f0f0f69;
+  
+  .side {
+    z-index: 900; /* 确保侧边栏在主内容上方 */
+    background-color: rgba(240, 240, 240, 0.9); /* 增加透明度使效果更好 */
   }
 }
-
 </style>
